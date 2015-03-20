@@ -3,11 +3,16 @@
 import pygame
 import sys
 import board
-from pygame.locals import *
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP, K_ESCAPE
 
 FPS = 30
 WINDOW_DIMENSIONS = (640, 640)  # Width and height of the pygame window
 BACKGROUND_COLOUR = (100, 100, 100)  # A shade of gray
+
+
+def quit():
+    pygame.quit()
+    sys.exit()
 
 
 def main():
@@ -26,19 +31,24 @@ def main():
     screen.blit(background, (0, 0))
 
     gameBoard = board.Board()
-    gameBoard.draw(screen)
-
-    pygame.display.flip()
 
     while True:
+        gameBoard.draw(screen)
+        pygame.display.flip()
         FPSCLOCK.tick(FPS)
+
         for event in pygame.event.get():  # event handling loop
             if event.type == QUIT or \
                (event.type == KEYUP and event.key == K_ESCAPE):
-                pygame.quit()
-                sys.exit()
-            elif event.type == MOUSEBUTTONUP:
-                print("CLICK AT:", pygame.mouse.get_pos())
+                quit()
+            elif event.type == MOUSEBUTTONUP and event.button == 1:
+                mousepos = pygame.mouse.get_pos()
+                colNum = gameBoard.detectColClick(mousepos)
+                isWin = gameBoard.placeToken(colNum)
+                if isWin:
+                    print("Player", gameBoard.TURN + 1, "wins!!!")
+                    quit()
+                print("CLICK AT:", mousepos)
 
 if __name__ == "__main__":
     main()
