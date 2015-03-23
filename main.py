@@ -3,6 +3,7 @@
 import pygame
 import sys
 import board
+from board import *
 from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP, K_ESCAPE
 
 FPS = 30
@@ -32,10 +33,14 @@ def main():
 
     gameBoard = board.Board()
 
+    count = 0 # count for time
+
     while True:
+        draw_header(gameBoard.COUNT1,gameBoard.COUNT2,screen)
+        draw_footer(gameBoard.TURN, count, screen)
         gameBoard.draw(screen)
         pygame.display.flip()
-        FPSCLOCK.tick(FPS)
+        count += FPSCLOCK.tick(FPS)
 
         for event in pygame.event.get():  # event handling loop
             if event.type == QUIT or \

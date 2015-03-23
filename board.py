@@ -4,6 +4,91 @@ import pygame
 from main import WINDOW_DIMENSIONS
 from piece import Piece
 
+def draw_header(player_moves, cpu_moves, surface):
+    """
+    Draw the header of the game
+     - Title
+     - Player move count
+
+    """
+    # erase the surface to be written to
+    pygame.draw.rect(surface, (100,100,100), (0,0, \
+                                              WINDOW_DIMENSIONS[0], \
+                                              WINDOW_DIMENSIONS[1] // 7))
+
+    # Set default system font, size 72
+    title_font = pygame.font.Font(None, 72)
+
+    title = title_font.render("Connect 4", True, (255, 255, 255))
+    surface.blit(title, \
+                 ((WINDOW_DIMENSIONS[0]) // 16, \
+                  WINDOW_DIMENSIONS[1] // 18))
+
+    moves_font = pygame.font.Font(None, 24)
+
+    cpu_title = moves_font.render("CPU moves:" , True, (255, 255, 255))
+    cpu_move = moves_font.render(str(cpu_moves), True, (255, 255, 255))
+
+    moves_x = WINDOW_DIMENSIONS[0] - (WINDOW_DIMENSIONS[0]) // 11
+    surface.blit(cpu_move, (moves_x,  WINDOW_DIMENSIONS[1] // 15.5))
+    surface.blit(cpu_title, (moves_x - (WINDOW_DIMENSIONS[0]) // 6, \
+                                 WINDOW_DIMENSIONS[1] // 15.5))
+
+    player_title = moves_font.render("Player moves:" , True, (255, 255, 255))
+    player_move = moves_font.render(str(player_moves), True, (255, 255, 255))
+
+    # 29 is added to y coordinate for \n since font size is 24
+    surface.blit(player_move, (moves_x, WINDOW_DIMENSIONS[1] // 18 + 29))
+    surface.blit(player_title, (moves_x - (WINDOW_DIMENSIONS[0]) // 5.25, \
+                                WINDOW_DIMENSIONS[1] // 18 + 29))
+
+def draw_footer(turn, timer, surface):
+    """
+    Draw the footer of the game
+     - Current player playing
+     - Running time of game
+
+    """
+    # erase surface to be written to
+    pygame.draw.rect(surface, (100,100,100), \
+                     (0, WINDOW_DIMENSIONS[1] - (WINDOW_DIMENSIONS[1] // 12), \
+                      WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1] // 12))
+
+    footer_font = pygame.font.Font(None, 24)
+
+    time_title = footer_font.render("Time Elapsed:" , True, (255, 255, 255))
+
+    # convert seconds to time
+    import time
+    seconds = time.strftime('%H:%M:%S', time.gmtime(timer // 1000))
+
+    surface.blit(time_title,
+                 (WINDOW_DIMENSIONS[0] // 16, \
+                      WINDOW_DIMENSIONS[1] - WINDOW_DIMENSIONS[1] // 18))
+
+    time_count = footer_font.render(seconds, True, (255, 255, 255))
+    surface.blit(time_count,
+                 (WINDOW_DIMENSIONS[0] // 4.1, \
+                      WINDOW_DIMENSIONS[1] - WINDOW_DIMENSIONS[1] // 18))
+
+    turn_title = footer_font.render("Turn:" , True, (255, 255, 255))
+
+    turn_x = WINDOW_DIMENSIONS[0] - (WINDOW_DIMENSIONS[0]) // 4.7
+
+    surface.blit(turn_title, \
+                 (turn_x, \
+                      WINDOW_DIMENSIONS[1] - WINDOW_DIMENSIONS[1] // 18))
+
+    # decide to display who's turn
+    if not turn:
+        turn_text = "CPU"
+    else:
+        turn_text = "Player"
+
+    turn = footer_font.render(turn_text, True, (255, 255, 255))
+    surface.blit(turn, \
+                 (turn_x + WINDOW_DIMENSIONS[0] // 14, \
+                      WINDOW_DIMENSIONS[1] - WINDOW_DIMENSIONS[1] // 18))
 
 class Board:
     def __init__(self, width=7, height=6, tokensize=80):
@@ -19,6 +104,8 @@ class Board:
         self.RECT = pygame.Rect(self.XMARG, self.YMARG,
                                 self.BOARDWIDTH, self.BOARDHEIGHT)
         self.TURN = 0
+        self.COUNT1 = 0 # player 1 moves
+        self.COUNT2 = 0 # player 2 moves
 
         self.PIECES = []
         for piecex in range(width):
@@ -91,4 +178,11 @@ class Board:
         if self.checkWin(self.TURN + 1):
             return True
         self.TURN = not self.TURN
+
+        # add to player move count
+        if self.TURN:
+            self.COUNT2 += 1
+        else:
+            self.COUNT1 += 1
+
         return False
