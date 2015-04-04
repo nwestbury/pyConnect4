@@ -34,18 +34,27 @@ class BasePlayer:
 
     def printBoard(self, board):
         print(">" * 14)
-        for i in range(5, -1, -1):
-            row = ""
-            for x in range(7):
-                row += str(self.getNthBit(board, i+x*7)) + " "
+        for i in range(5, -1, -1):  # iterate backwards from 5 to 0.
+            row = " ".join(str(self.getNthBit(board, i+x*7)) for x in range(7))
             print(row)
         print("<" * 14)
 
-    def getCoordinates(self, overall):
+    def get_legal_locations(self, overall_bitboard):
+        """
+        Argument:
+            overall_bitboard: the combined bitboard for both players (b1 | b2).
+            One needs to combine the boards in order to find the top location
+            (and check if its empty for a token).
+
+        This function returns a list of tuples for every location that a piece
+        could be placed (max of 7). The tuple has two items. The first is the
+        column # (0-6) and the second is the bit index for the bitboard (0-42).
+        It will returns an empty list when the board is full.
+        """
         listOfCoords = []
         for i in range(7):
             for x in range(i*7, i*7+6):
-                if not self.getNthBit(overall, x):
+                if not self.getNthBit(overall_bitboard, x):
                     listOfCoords.append((i, x))
                     break
         return listOfCoords
