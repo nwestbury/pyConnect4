@@ -37,8 +37,8 @@ def main():
 
     screen.blit(background, (0, 0))
 
-    player1 = AI()
-    player2 = Human()
+    player1 = Human()
+    player2 = AI()
     gameBoard = board.Board(player1, player2)
 
     count = 0  # count for time elapsed

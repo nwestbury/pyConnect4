@@ -141,7 +141,7 @@ class AI (BasePlayer):
         http://stackoverflow.com/questions/9829578/fast-way-of-counting-bits-in-python
         """
 
-        i = i & 18446464815071240256  # magic number to mask to only legal bit
+        i = i & 0xFDFBF7EFDFBF  # magic number to mask to only legal bit
         # board positions (bits 0-5, 7-12, 14-19, 21-26, 28-33, 35-40, 42-47)
         i = (i & 0x5555555555555555) + ((i & 0xAAAAAAAAAAAAAAAA) >> 1)
         i = (i & 0x3333333333333333) + ((i & 0xCCCCCCCCCCCCCCCC) >> 2)
