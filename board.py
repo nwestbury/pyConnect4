@@ -149,7 +149,7 @@ class Board:
         col : the column number by default an int between [0,6] where a token
         is requested to be placed.
 
-        Return: 1 if the placed token wins the game, 0 otherwise
+        Return: 1 if the placed token wins the game 2 if draw, 0 otherwise
         """
         if col < 0:  # invalid column
             return False
@@ -180,13 +180,21 @@ class Board:
             return True
         return False
 
+    def hasDrawn(self, overall_bitboard):
+        return (overall_bitboard & 18446464815071240256) == 18446464815071240256
+
     def endTurn(self):
         """
-        This function is called at the end of every turn. It returns True on win
+        This function is called at the end of every turn. It returns 1 on win
+        2 on draw
         False otherwise
         """
         if self.hasWon(self.BITBOARDS[self.TURN]):
-            return True
+            return 1
+
+        if self.hasDrawn(self.BITBOARDS[0] | self.BITBOARDS[1]):
+            return 2
+
         self.TURN = not self.TURN
 
         # add to player move count

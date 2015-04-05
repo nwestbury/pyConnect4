@@ -1,37 +1,60 @@
+#!/usr/bin/python3
+
+import random
+
+
 class graph:
     def __init__(self, myBoard, oppBoard):
+        # initiate the first/root node to be at depth 0 and pointing to itself
         rootNode = node(myBoard, oppBoard, 0, -1, -1)
         self.root = rootNode
 
-    def getChildrenValues(self, node):
-        for child in node.children:
-            self.getChildrenValues(child)
-            child.setValueFromChildren()
-
     def getMove(self):
-        self.getChildrenValues(self.root)
-        self.root.setValueFromChildren()
+        """
+        This function simply returns the column from the minimax graphs's top
+        values. In the case there is more than one column equally-well rated,
+        we will randomly return one of them (we didn't bother seeding the rand
+        since we'd prefer results are reproducible).
+        """
+
         bestvalue = self.root.value
+        rootChildren = self.root.children
 
-        print("Best Value:", bestvalue)
+        print("Best   value :", bestvalue)
+        print("Column values:", rootChildren)
 
-        print("Root children: %s" % self.root.children)
-        for child in self.root.children:
-            print("Col%d children: %s" % (child.col, child.children))
+        bestColumns = [c.col for c in rootChildren if c.value == bestvalue]
 
-        self.root.setValueFromChildren()
-
-        for child in self.root.children:
-            if child.value == bestvalue:
-                return child.col
+        if bestColumns:
+            return random.choice(bestColumns)
 
         raise Exception("Failed to find best value")
 
     def construct_tree(self, b, ai, parentNode, myBoard, oppBoard, depth):
+        """
+        Likely the most complex function, this builds the tree of possibilities
+        by brute forcing through all possible configurations up to a given depth
+        (maxDepth). It works by getting the legal locations of where a place can
+        be placed, and setting those bits (equivalent to placing a token). Once
+        the board is either won or the max depth is reached, we evaluate the
+        board. When the function pops out, it creates the value of the parent
+        node based on its children values (maxmizing the values if we are
+        playing or minimizing if the opponent is playing). On a high level, we
+        are presuming both players will play the optimal moves and we want to
+        maxmize our reward and minimize the opponent's rewards. We alternate
+        back and forth from maximizing and minizming the reward after the
+        lowest tree values have been filled.
+
+        tl;dr This function fills a minimax tree.
+
+        The function runs in O(7^n) (n=depth), but the true expansion is
+        considerably less than this after the move # + depth >= 4, because we
+        stop branches where there is a win and all seven columns are not
+        necessarily available.
+
+        """
         bMyTurn = (depth % 2 == 1)
-        if depth == 4:
-            parentNode.value = ai.heuristic(b, myBoard, oppBoard, bMyTurn)
-            return
+        maxDepth = 5
 
         possibleBits = ai.get_legal_locations(myBoard | oppBoard)
         childrenNodes = []
@@ -40,29 +63,32 @@ class graph:
             won = False
             col = colbitTuple[0]
 
-            if bMyTurn:  # odd means it's my board
+            if bMyTurn:  # it's my turn, so add to my board
                 tmpMyBoard = ai.setNthBit(myBoard, colbitTuple[1])
                 tmpOppBoard = oppBoard
                 won = b.hasWon(tmpMyBoard)
-            else:  # it's the oppnent's turn, so we simulate their moves
+            else:  # it's the oppnent's turn, so we simulate their move
                 tmpMyBoard = myBoard
                 tmpOppBoard = ai.setNthBit(oppBoard, colbitTuple[1])
                 won = b.hasWon(tmpOppBoard)
 
             myNode = node(tmpMyBoard, tmpOppBoard, depth, parentNode, col)
 
-            if won:
-                myNode.value = ai.heuristic(b, tmpMyBoard, tmpOppBoard, bMyTurn)
+            if won or depth == maxDepth:
+                myNode.value = ai.evalCost(b, tmpOppBoard, tmpMyBoard, bMyTurn)
             else:
                 self.construct_tree(b, ai, myNode,
                                     tmpMyBoard, tmpOppBoard, depth+1)
+                myNode.setValueFromChildren()
+
             childrenNodes.append(myNode)
 
         parentNode.children = childrenNodes
+        parentNode.setValueFromChildren()
 
 
 class node:
-    def __init__(self, myBoard, oppBoard, depth, parentNode, col, value=0):
+    def __init__(self, myBoard, oppBoard, depth, parentNode, col, value=None):
         self.myBoard = myBoard
         self.oppBoard = oppBoard
         self.value = value
@@ -75,7 +101,11 @@ class node:
         self.col = col
 
     def setValueFromChildren(self):
-        if self.children:
+        """
+        Get the value of a node based on its children, minimizing if value if
+        it's the opponent turn or maxmizing if it's before my turn.
+        """
+        if self.children and self.value is None:
             if self.depth % 2 == 0:
                 self.value = max(c.value for c in self.children)
             else:

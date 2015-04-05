@@ -5,7 +5,7 @@ from pygame import gfxdraw
 
 class Piece:
     def __init__(self, boardx, boardy, board, tokensize=80):
-        margin = 10
+        margin = 10  # margin on both sides of token
         self.radius = tokensize//2 - margin
         self.BOARDX = boardx
         self.BOARDY = boardy
