@@ -6,7 +6,7 @@ from main import WINDOW_DIMENSIONS
 from piece import Piece
 
 
-def draw_header(player_moves, cpu_moves, surface):
+def draw_header(players, player1_moves, player2_moves, surface):
     """
     Draw the header of the game
      - Title
@@ -28,24 +28,28 @@ def draw_header(player_moves, cpu_moves, surface):
 
     moves_font = pygame.font.Font(None, 24)
 
-    cpu_title = moves_font.render("CPU moves:", True, (255, 255, 255))
-    cpu_move = moves_font.render(str(cpu_moves), True, (255, 255, 255))
+    player1_text = str(players[0]) + " moves: "
+    
+    player1_title = moves_font.render(player1_text, True, (255, 255, 255))
+    player1_move = moves_font.render(str(player2_moves), True, (255, 255, 255))
 
     moves_x = WINDOW_DIMENSIONS[0] - WINDOW_DIMENSIONS[0] // 11
-    surface.blit(cpu_move, (moves_x,  WINDOW_DIMENSIONS[1] // 15.5))
-    surface.blit(cpu_title, (moves_x - WINDOW_DIMENSIONS[0] // 6,
+    surface.blit(player1_move, (moves_x,  WINDOW_DIMENSIONS[1] // 15.5))
+    surface.blit(player1_title, (moves_x - WINDOW_DIMENSIONS[0] // 5.25,
                              WINDOW_DIMENSIONS[1] // 15.5))
 
-    player_title = moves_font.render("Player moves:", True, (255, 255, 255))
-    player_move = moves_font.render(str(player_moves), True, (255, 255, 255))
+    player2_text = str(players[1]) + " moves: "
+    
+    player2_title = moves_font.render(player2_text, True, (255, 255, 255))
+    player2_move = moves_font.render(str(player1_moves), True, (255, 255, 255))
 
     # 29 is added to y coordinate for \n since font size is 24
-    surface.blit(player_move, (moves_x, WINDOW_DIMENSIONS[1] // 18 + 29))
-    surface.blit(player_title, (moves_x - WINDOW_DIMENSIONS[0] // 5.25,
+    surface.blit(player2_move, (moves_x, WINDOW_DIMENSIONS[1] // 18 + 29))
+    surface.blit(player2_title, (moves_x - WINDOW_DIMENSIONS[0] // 5.23,
                                 WINDOW_DIMENSIONS[1] // 18 + 29))
 
 
-def draw_footer(turn, timer, surface):
+def draw_footer(turn, players, timer, surface):
     """
     Draw the footer of the game
      - Current player playing
@@ -75,7 +79,7 @@ def draw_footer(turn, timer, surface):
 
     turn_title = footer_font.render("Turn:", True, (255, 255, 255))
 
-    turn_x = WINDOW_DIMENSIONS[0] - (WINDOW_DIMENSIONS[0]) // 4.7
+    turn_x = WINDOW_DIMENSIONS[0] - (WINDOW_DIMENSIONS[0]) // 4.5
 
     surface.blit(turn_title,
                  (turn_x,
@@ -83,9 +87,9 @@ def draw_footer(turn, timer, surface):
 
     # decide to display who's turn
     if not turn:
-        turn_text = "CPU"
+        turn_text = str(players[0])
     else:
-        turn_text = "Player"
+        turn_text = str(players[1])
 
     turn = footer_font.render(turn_text, True, (255, 255, 255))
     surface.blit(turn,

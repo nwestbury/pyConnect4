@@ -3,7 +3,7 @@
 import pygame
 import sys
 import board
-from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP, K_ESCAPE
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP, K_ESCAPE, K_r
 from Player import Human, AI
 
 FPS = 30  # this isn't an intense game, so 30 frames per second is good enough
@@ -18,6 +18,18 @@ def quit():
     pygame.quit()
     sys.exit()
 
+def playAgain():
+    """
+    This function checks to see if a new game wants to be played at the end.
+
+    """
+    while True:
+        for event in pygame.event.get():  # event handling loop
+            if event.type == QUIT or \
+               (event.type == KEYUP and event.key == K_ESCAPE):
+                quit()
+            elif event.type == KEYUP and event.key == K_r:
+                main()
 
 def main():
     """
@@ -37,16 +49,17 @@ def main():
 
     screen.blit(background, (0, 0))
 
-    player1 = Human()
-    player2 = AI()
+    player1 = AI()
+    player2 = Human()
     gameBoard = board.Board(player1, player2)
 
     count = 0  # count for time elapsed
     isDone = False
 
     while not isDone:
-        board.draw_header(gameBoard.COUNT1, gameBoard.COUNT2, screen)  # DrawTop
-        board.draw_footer(gameBoard.TURN, count, screen)  # DrawBottom
+        # draw header and footer
+        board.draw_header(gameBoard.PLAYERS, gameBoard.COUNT1, gameBoard.COUNT2, screen)
+        board.draw_footer(gameBoard.TURN, gameBoard.PLAYERS, count, screen)
         gameBoard.draw(screen)  # draw the main game board
         pygame.display.flip()  # update the screen
         count += FPSCLOCK.tick(FPS)
@@ -65,20 +78,24 @@ def main():
                 isDone = gameBoard.play(mousepos)
                 print("CLICK AT:", mousepos)
 
-    if isDone == 1:
-        print("Player %d (%s) wins!!!" %
-              (gameBoard.TURN + 1, gameBoard.PLAYERS[gameBoard.TURN]))
-    else:
-        print("Draw!")
+    gameBoard.draw(screen)
 
-    while True:
-        gameBoard.draw(screen)
-        pygame.display.flip()
-        FPSCLOCK.tick(FPS)
-        for event in pygame.event.get():  # event handling loop
-            if event.type == QUIT or \
-               (event.type == KEYUP and event.key == K_ESCAPE):
-                quit()
+    message_font = pygame.font.Font(None, 100)
+    message_pos = screen.get_rect().centerx
+
+    if isDone == 1:
+        message_text = str(gameBoard.PLAYERS[gameBoard.TURN]) + " Wins!"
+    else:
+        message_text = "Draw!"
+
+    message = message_font.render(message_text, True, (160,160,169))
+    message_pos = message.get_rect()
+    message_pos.centerx = screen.get_rect().centerx
+    message_pos.centery = screen.get_rect().centery
+    screen.blit(message, message_pos)
+
+    pygame.display.flip()  # update the screen
 
 if __name__ == "__main__":
     main()
+    playAgain()

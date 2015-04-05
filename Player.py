@@ -93,20 +93,36 @@ class AI (BasePlayer):
         result = inverseBoard & (myBoard >> 7) & (myBoard >> 14)\
             & (myBoard >> 14)
 
+        result |= inverseBoard & (myBoard >> 7) & (myBoard >> 14)
+        result |= inverseBoard & (myBoard >> 7) & (myBoard << 7) \
+            & (myBoard << 7)
+
         # check for XX_
-        result |= inverseBoard & (myBoard << 7) & (myBoard << 14)\
+        result |= inverseBoard & (myBoard << 7) & (myBoard << 14) \
             & (myBoard << 14)
 
-        # check for XX_ / diagonal
-        result |= inverseBoard & (myBoard << 8) & (myBoard << 16)\
+        # check for XX / diagonal
+        result |= inverseBoard & (myBoard << 8) & (myBoard << 16) \
             & (myBoard << 16)
 
-        # check for _XX \ diagonal
-        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12)\
+        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16) \
+            & (myBoard >> 16)
+        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16)
+        result |= inverseBoard & (myBoard >> 8) & (myBoard << 8) \
+            & (myBoard << 8)
+
+        # check for XX \ diagonal
+        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12) \
             & (myBoard >> 12)
 
+        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12)
+        result |= inverseBoard & (myBoard >> 6) & (myBoard << 6) \
+            & (myBoard << 6)
+        result |= inverseBoard & (myBoard << 6) & (myBoard << 12) \
+            & (myBoard << 12)
+
         # check for _XX vertical
-        result |= inverseBoard & (myBoard << 1) & (myBoard << 2)\
+        result |= inverseBoard & (myBoard << 1) & (myBoard << 2) \
             & (myBoard << 2)
 
         return result
@@ -162,7 +178,7 @@ class AI (BasePlayer):
         Running time: O(7n)
         """
 
-        winReward = 1000000
+        winReward = 999999999
         OppCost3Row = 1000  # if bMyTurn else 500
         MyCost3Row = 10000
         OppCost2Row = 100  # if bMyTurn else 100
