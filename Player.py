@@ -5,8 +5,8 @@ import tree
 
 
 class Human (BasePlayer):
-    def __init__(self):
-        BasePlayer.__init__(self, "Human", False)
+    def __init__(self, name="Human"):
+        BasePlayer.__init__(self, name, False)
 
     def detectColClick(self, board, mousepos):
         if board.RECT.collidepoint(mousepos):  # if click is inside the board
@@ -19,8 +19,8 @@ class Human (BasePlayer):
 
 
 class AI (BasePlayer):
-    def __init__(self):
-        BasePlayer.__init__(self, "CPU", True)
+    def __init__(self, name="CPU"):
+        BasePlayer.__init__(self, name, True)
 
     def evaluate3(self, oppBoard, myBoard):
         """
@@ -112,7 +112,6 @@ class AI (BasePlayer):
         lShift6MyBoard = myBoard << 6
         rShift12MyBoard = myBoard >> 12
         lShift12MyBoard = myBoard << 12
-
 
         # check for _XX
         result = inverseBoard & rShift7MyBoard & rShift14MyBoard
