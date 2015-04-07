@@ -18,9 +18,9 @@ argument inside AI("NAME") or Human("NAME"). The following is an example:
 
 To play again, press the 'r' button on your keyboard.
 
-# Fun Stuff
+## Fun Stuff
 
-## bitboard
+### bitboard
 The board of this game implemented by a 64 bit bitboard. The bitboard
 representation is as follows:
 ```
@@ -39,7 +39,7 @@ Using a bitboard representation allows for faster computation times in
 calculating the costs and seeing who wins in the game since each board is
 represented as a 64 bit number.
 
-## AI
+### AI
 
 The AI consists of the evaluation function and a graph class. The evalaution
 function calculates a cost for each board of a node in the graph.
@@ -49,13 +49,13 @@ To decide a move, the AI moves up each node by depth using a mini-max
 algorithm (alternating between max cost of the board and min cost of the
 board each depth).
 
-# Credits
+## Credits
 
 John Tromp's bitboard - http://tromp.github.io/c4/Connect4.java
 
 Evaluating position in bitboard - http://www.gamedev.net/topic/596955-trying-bit-boards-for-connect-4/
 
-# To be implemented
+## To be implemented
 
 - Main menu where you can decide who plays
 - Different difficulties of AI (changing depth and modifying evaluation
