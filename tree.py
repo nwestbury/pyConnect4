@@ -30,7 +30,7 @@ class graph:
 
         raise Exception("Failed to find best value")
 
-    def construct_tree(self, b, ai, parentNode, myBoard, oppBoard, depth):
+    def construct_tree(self, b, ai, parentNode, myBoard, oppBoard, depth, maxDepth):
         """
         Likely the most complex function, this builds the tree of possibilities
         by brute forcing through all possible configurations up to a given depth
@@ -54,7 +54,6 @@ class graph:
 
         """
         bMyTurn = (depth % 2 == 1)
-        maxDepth = 5
 
         possibleBits = ai.get_legal_locations(myBoard | oppBoard)
         childrenNodes = []
@@ -78,7 +77,7 @@ class graph:
                 myNode.value = ai.evalCost(b, tmpOppBoard, tmpMyBoard, bMyTurn)
             else:
                 self.construct_tree(b, ai, myNode,
-                                    tmpMyBoard, tmpOppBoard, depth+1)
+                                    tmpMyBoard, tmpOppBoard, depth+1, maxDepth)
                 myNode.setValueFromChildren()
 
             childrenNodes.append(myNode)

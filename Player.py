@@ -193,7 +193,7 @@ class AI (BasePlayer):
 
         winReward = 999999999
         OppCost3Row = 1000
-        MyCost3Row = 1000
+        MyCost3Row = 5000
         OppCost2Row = 500
         MyCost2Row = 500
         OppCost1Row = 100
@@ -225,53 +225,6 @@ class AI (BasePlayer):
         return winning3 + blocking3 + winning2 + blocking2\
             + winning1 + blocking1
 
-    def checkForNInRow(self, bitboard, n):
-        """
-        This function returns the amount of n in a row found in the board.
-        It has been deprecated by the much faster binary functions above which
-        are optimized for n = 1, 2, and 3.
-
-        bitboard is a bitboard representation of the board for the given player
-        The bitboard representation is like this:
-        .  .  .  .  .  .  .  TOP
-        5 12 19 26 33 40 47
-        4 11 18 25 32 39 46
-        3 10 17 24 31 38 45
-        2  9 16 23 30 37 44
-        1  8 15 22 29 36 43
-        0  7 14 21 28 35 42  BOTTOM
-        """
-        counter = 0
-        for col_num in range(7):
-            low_col = col_num*7
-            top_col = low_col + 6
-            for bb_index in range(low_col, top_col):
-                bHorizontalSpace = n+col_num <= 7
-                bVerticalSpace = bb_index+n <= top_col
-                bVerticalDownSpace = bb_index-n+1 >= low_col
-
-                # check right horiontal
-                if bHorizontalSpace and\
-                        all((self.getNthBit(bitboard, k)
-                             for k in range(bb_index, (bb_index+7*n), 7))):
-                    counter += 1
-                # check top vertical
-                if bVerticalSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+n)))):
-                    counter += 1
-                # check / vertical
-                if bHorizontalSpace and bVerticalSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+8*n), 8))):
-                    counter += 1
-                # check \ vertical
-                if bHorizontalSpace and bVerticalDownSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+6*n), 6))):
-                    counter += 1
-        return counter
-
     def search(self, board):
         """
         Construct the minimax tree, and get the best move based off the root.
@@ -279,7 +232,7 @@ class AI (BasePlayer):
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
         g = tree.graph(myBoard, oppBoard)  # minimax graph
-        g.construct_tree(board, self, g.root, myBoard, oppBoard, 1)
+        g.construct_tree(board, self, g.root, myBoard, oppBoard, 1, 5)
 
         return g.getMove()
 
