@@ -106,10 +106,10 @@ class node:
         it's the opponent turn or maxmizing if it's before my turn.
         """
         if self.children and self.value is None:
-            if self.depth % 2 == 0:
-                self.value = max(c.value for c in self.children)
-            else:
+            if self.depth % 2:
                 self.value = min(c.value for c in self.children)
+            else:
+                self.value = max(c.value for c in self.children)
 
     def __repr__(self):
         return str(self.value)

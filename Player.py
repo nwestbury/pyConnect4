@@ -33,45 +33,57 @@ class AI (BasePlayer):
         """
 
         inverseBoard = ~(myBoard | oppBoard)
+        rShift7MyBoard = myBoard >> 7
+        lShift7MyBoard = myBoard << 7
+        rShift14MyBoard = myBoard >> 14
+        lShit14MyBoard = myBoard << 14
+        rShift16MyBoard = myBoard >> 16
+        lShift16MyBoard = myBoard << 16
+        rShift8MyBoard = myBoard >> 8
+        lShift8MyBoard = myBoard << 8
+        rShift6MyBoard = myBoard >> 6
+        lShift6MyBoard = myBoard << 6
+        rShift12MyBoard = myBoard >> 12
+        lShift12MyBoard = myBoard << 12
 
         # check _XXX and XXX_ horizontal
 
-        result = inverseBoard & (myBoard >> 7) & (myBoard >> 14)\
+        result = inverseBoard & rShift7MyBoard & rShift14MyBoard\
             & (myBoard >> 21)
 
-        result |= inverseBoard & (myBoard >> 7) & (myBoard >> 14)\
-            & (myBoard << 7)
+        result |= inverseBoard & rShift7MyBoard & rShift14MyBoard\
+            & lShift7MyBoard
 
-        result |= inverseBoard & (myBoard >> 7) & (myBoard << 7)\
-            & (myBoard << 14)
+        result |= inverseBoard & rShift7MyBoard & lShift7MyBoard\
+            & lShit14MyBoard
 
-        result |= inverseBoard & (myBoard << 7) & (myBoard << 14)\
+        result |= inverseBoard & lShift7MyBoard & lShit14MyBoard\
             & (myBoard << 21)
 
         # check XXX_ diagonal /
-        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16)\
+        result |= inverseBoard & rShift8MyBoard & rShift16MyBoard\
             & (myBoard >> 24)
 
-        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16)\
-            & (myBoard << 8)
+        result |= inverseBoard & rShift8MyBoard & rShift16MyBoard\
+            & lShift8MyBoard
 
-        result |= inverseBoard & (myBoard >> 8) & (myBoard << 8)\
-            & (myBoard << 16)
+        result |= inverseBoard & rShift8MyBoard & lShift8MyBoard\
+            & lShift16MyBoard
 
-        result |= inverseBoard & (myBoard << 8) & (myBoard << 16)\
+        result |= inverseBoard & lShift8MyBoard & lShift16MyBoard\
             & (myBoard << 24)
 
         # check _XXX diagonal \
-        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12)\
+        result |= inverseBoard & rShift6MyBoard & rShift12MyBoard\
             & (myBoard >> 18)
 
-        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12)\
-            & (myBoard << 6)
+        result |= inverseBoard & rShift6MyBoard & rShift12MyBoard\
+            & lShift6MyBoard
 
-        result |= inverseBoard & (myBoard >> 6) & (myBoard << 6)\
-            & (myBoard << 12)
+        result |= inverseBoard & rShift6MyBoard & lShift6MyBoard\
+            & lShift12MyBoard
 
-        result |= inverseBoard & (myBoard << 6) & (myBoard << 12)\
+        result |= inverseBoard & lShift6MyBoard & lShift12MyBoard\
             & (myBoard << 18)
 
         # check for _XXX vertical
@@ -88,38 +100,40 @@ class AI (BasePlayer):
 
         """
         inverseBoard = ~(myBoard | oppBoard)
+        rShift7MyBoard = myBoard >> 7
+        rShift14MyBoard = myBoard >> 14
+        lShift7MyBoard = myBoard << 7
+        lShift14MyBoard = myBoard << 14
+        rShift8MyBoard = myBoard >> 8
+        lShift8MyBoard = myBoard << 8
+        lShift16MyBoard = myBoard << 16
+        rShift16MyBoard = myBoard >> 16
+        rShift6MyBoard = myBoard >> 6
+        lShift6MyBoard = myBoard << 6
+        rShift12MyBoard = myBoard >> 12
+        lShift12MyBoard = myBoard << 12
+
 
         # check for _XX
-        result = inverseBoard & (myBoard >> 7) & (myBoard >> 14)\
-            & (myBoard >> 14)
-
-        result |= inverseBoard & (myBoard >> 7) & (myBoard >> 14)
-        result |= inverseBoard & (myBoard >> 7) & (myBoard << 7) \
-            & (myBoard << 7)
+        result = inverseBoard & rShift7MyBoard & rShift14MyBoard
+        result |= inverseBoard & rShift7MyBoard & rShift14MyBoard
+        result |= inverseBoard & rShift7MyBoard & lShift7MyBoard
 
         # check for XX_
-        result |= inverseBoard & (myBoard << 7) & (myBoard << 14) \
-            & (myBoard << 14)
+        result |= inverseBoard & lShift7MyBoard & lShift14MyBoard
 
         # check for XX / diagonal
-        result |= inverseBoard & (myBoard << 8) & (myBoard << 16) \
-            & (myBoard << 16)
+        result |= inverseBoard & lShift8MyBoard & lShift16MyBoard
 
-        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16) \
-            & (myBoard >> 16)
-        result |= inverseBoard & (myBoard >> 8) & (myBoard >> 16)
-        result |= inverseBoard & (myBoard >> 8) & (myBoard << 8) \
-            & (myBoard << 8)
+        result |= inverseBoard & rShift8MyBoard & rShift16MyBoard
+        result |= inverseBoard & rShift8MyBoard & rShift16MyBoard
+        result |= inverseBoard & rShift8MyBoard & lShift8MyBoard
 
         # check for XX \ diagonal
-        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12) \
-            & (myBoard >> 12)
-
-        result |= inverseBoard & (myBoard >> 6) & (myBoard >> 12)
-        result |= inverseBoard & (myBoard >> 6) & (myBoard << 6) \
-            & (myBoard << 6)
-        result |= inverseBoard & (myBoard << 6) & (myBoard << 12) \
-            & (myBoard << 12)
+        result |= inverseBoard & rShift6MyBoard & rShift12MyBoard
+        result |= inverseBoard & rShift6MyBoard & rShift12MyBoard
+        result |= inverseBoard & rShift6MyBoard & lShift6MyBoard
+        result |= inverseBoard & lShift6MyBoard & lShift12MyBoard
 
         # check for _XX vertical
         result |= inverseBoard & (myBoard << 1) & (myBoard << 2) \
@@ -157,8 +171,8 @@ class AI (BasePlayer):
         http://stackoverflow.com/questions/9829578/fast-way-of-counting-bits-in-python
         """
 
-        i = i & 0xFDFBF7EFDFBF  # magic number to mask to only legal bit
-        # board positions (bits 0-5, 7-12, 14-19, 21-26, 28-33, 35-40, 42-47)
+        i = i & 0xFDFBF7EFDFBF  # magic number to mask to only legal bitboard
+        # positions (bits 0-5, 7-12, 14-19, 21-26, 28-33, 35-40, 42-47)
         i = (i & 0x5555555555555555) + ((i & 0xAAAAAAAAAAAAAAAA) >> 1)
         i = (i & 0x3333333333333333) + ((i & 0xCCCCCCCCCCCCCCCC) >> 2)
         i = (i & 0x0F0F0F0F0F0F0F0F) + ((i & 0xF0F0F0F0F0F0F0F0) >> 4)
@@ -179,12 +193,12 @@ class AI (BasePlayer):
         """
 
         winReward = 999999999
-        OppCost3Row = 1000  # if bMyTurn else 500
-        MyCost3Row = 10000
-        OppCost2Row = 100  # if bMyTurn else 100
-        MyCost2Row = 50
-        OppCost1Row = 0  # if bMyTurn else 10
-        MyCost1Row = 0
+        OppCost3Row = 1000
+        MyCost3Row = 1000
+        OppCost2Row = 500
+        MyCost2Row = 500
+        OppCost1Row = 100
+        MyCost1Row = 100
 
         if b.hasWon(oppBoard):
             return -winReward
