@@ -23,6 +23,7 @@ To play again, press the 'r' button on your keyboard.
 ## bitboard
 The board of this game implemented by a 64 bit bitboard. The bitboard
 representation is as follows:
+```
         .  .  .  .  .  .  .  TOP
         5 12 19 26 33 40 47
         4 11 18 25 32 39 46
@@ -30,6 +31,7 @@ representation is as follows:
         2  9 16 23 30 37 44
         1  8 15 22 29 36 43
         0  7 14 21 28 35 42  BOTTOM
+```
 Where each space is a bit, the rest of the spaces that are not shown or '.'
 will always be 0.
 
