@@ -82,7 +82,7 @@ class graph:
             else:
                 self.construct_tree(b, ai, myNode,
                                     tmpMyBoard, tmpOppBoard, depth+1)
-                myNode.setValueFromChildren()
+                alpha = myNode.setValueFromChildren()
 
             childrenNodes.append(myNode)
 
@@ -113,6 +113,7 @@ class node:
                 self.value = min(c.value for c in self.children)
             else:
                 self.value = max(c.value for c in self.children)
+            return self.value
 
     def __repr__(self):
         return str(self.value)

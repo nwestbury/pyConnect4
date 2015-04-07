@@ -284,6 +284,11 @@ class AI (BasePlayer):
         return g.getMove()
 
     def forced_moves(self, board):
+        """
+        If placing a token can win immediately, return that column.
+        Otherwise, if you can block your opponent immediately, return
+        one of those column(s).
+        """
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
         possibleBits = self.get_legal_locations(myBoard | oppBoard)
@@ -303,6 +308,9 @@ class AI (BasePlayer):
         return -1
 
     def play(self, board):
+        """
+        Returns the column to place the piece in.
+        """
         forcedColumn = self.forced_moves(board)  # if there is a forced move
         if forcedColumn > -1:
             return forcedColumn  # play it
