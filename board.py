@@ -29,24 +29,24 @@ def draw_header(players, player1_moves, player2_moves, surface):
     moves_font = pygame.font.Font(None, 24)
 
     player1_text = str(players[0]) + " moves: "
-    
+
     player1_title = moves_font.render(player1_text, True, (255, 255, 255))
     player1_move = moves_font.render(str(player2_moves), True, (255, 255, 255))
 
     moves_x = WINDOW_DIMENSIONS[0] - WINDOW_DIMENSIONS[0] // 11
     surface.blit(player1_move, (moves_x,  WINDOW_DIMENSIONS[1] // 15.5))
     surface.blit(player1_title, (moves_x - WINDOW_DIMENSIONS[0] // 5.25,
-                             WINDOW_DIMENSIONS[1] // 15.5))
+                                 WINDOW_DIMENSIONS[1] // 15.5))
 
     player2_text = str(players[1]) + " moves: "
-    
+
     player2_title = moves_font.render(player2_text, True, (255, 255, 255))
     player2_move = moves_font.render(str(player1_moves), True, (255, 255, 255))
 
     # 29 is added to y coordinate for \n since font size is 24
     surface.blit(player2_move, (moves_x, WINDOW_DIMENSIONS[1] // 18 + 29))
     surface.blit(player2_title, (moves_x - WINDOW_DIMENSIONS[0] // 5.23,
-                                WINDOW_DIMENSIONS[1] // 18 + 29))
+                                 WINDOW_DIMENSIONS[1] // 18 + 29))
 
 
 def draw_footer(turn, players, timer, surface):
@@ -185,7 +185,12 @@ class Board:
         return False
 
     def hasDrawn(self, overall_bitboard):
-        return (overall_bitboard & 18446464815071240256) == 18446464815071240256
+        """
+        If the board has all of its valid slots filled, then it is a draw.
+        We mask the board to a bitboard with all positions filled
+        (0xFDFBF7EFDFBF) and if all the bits are active, it is a draw.
+        """
+        return (overall_bitboard & 0xFDFBF7EFDFBF) == 0xFDFBF7EFDFBF
 
     def endTurn(self):
         """

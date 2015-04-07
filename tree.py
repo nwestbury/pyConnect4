@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-import random
-
 
 class graph:
     def __init__(self, myBoard, oppBoard):
@@ -26,11 +24,15 @@ class graph:
         bestColumns = [c.col for c in rootChildren if c.value == bestvalue]
 
         if bestColumns:
-            return random.choice(bestColumns)
+            if len(bestColumns) > 1:
+                # return the column closest to the center, if they are all equ
+                return min(bestColumns, key=lambda x: 3-x)
+            else:
+                return bestColumns[0]
 
         raise Exception("Failed to find best value")
 
-    def construct_tree(self, b, ai, parentNode, myBoard, oppBoard, depth, maxDepth):
+    def construct_tree(self, b, ai, parentNode, myBoard, oppBoard, depth):
         """
         Likely the most complex function, this builds the tree of possibilities
         by brute forcing through all possible configurations up to a given depth
@@ -54,6 +56,7 @@ class graph:
 
         """
         bMyTurn = (depth % 2 == 1)
+        maxDepth = 5
 
         possibleBits = ai.get_legal_locations(myBoard | oppBoard)
         childrenNodes = []
@@ -73,11 +76,12 @@ class graph:
 
             myNode = node(tmpMyBoard, tmpOppBoard, depth, parentNode, col)
 
+            # stop expanding the branch if the game is won | max depth = reached
             if won or depth == maxDepth:
                 myNode.value = ai.evalCost(b, tmpOppBoard, tmpMyBoard, bMyTurn)
             else:
                 self.construct_tree(b, ai, myNode,
-                                    tmpMyBoard, tmpOppBoard, depth+1, maxDepth)
+                                    tmpMyBoard, tmpOppBoard, depth+1)
                 myNode.setValueFromChildren()
 
             childrenNodes.append(myNode)

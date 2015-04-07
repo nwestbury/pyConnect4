@@ -1,12 +1,25 @@
-# pyConnect4
+# pyConnect4: Final Project
+## Authors: Kalvin Eng and Nicholas Westbury
+## CMPUT 275: Lec B1 / EB1
 An implementation of Connect 4 in python's pygame with emphasis on the AI.
 
 ## Requirements
 - pygame
 - python3
 
+## Files
+The source code can be found on GitHub: https://github.com/nwestbury/pyConnect4
+The files included should be as follows:
+    BasePlayer.py (inherited in Player.py, functions that are used in both the Human and AI Classes)
+    Player.py (the AI and Human Classes, that have their own play functions)
+    board.py (the board containing the pieces)
+    main.py (the primary game loop)
+    piece.py (the graphic piece class)
+    tree.py (the minimax tree)
+    README.md (this file, using MarkDown)
+
 ## Running Connect 4
-To run the game, cd to directory of the game and enter "python3 main.py" in
+To run the game, cd to directory of the game and enter `python3 main.py` in
 terminal.
 
 To change who plays edit main.py file line 51's player1 and 52's player2
@@ -22,7 +35,7 @@ To play again, press the 'r' button on your keyboard.
 
 ### bitboard
 The board of this game implemented by a 64 bit bitboard. The bitboard
-representation is as follows:
+representation is as follows and each of the two players has their own bitboard:
 ```
         .  .  .  .  .  .  .  TOP
         5 12 19 26 33 40 47
