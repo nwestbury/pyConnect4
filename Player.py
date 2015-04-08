@@ -191,7 +191,7 @@ class AI (BasePlayer):
         Running time: O(7n)
         """
 
-        winReward = 999999999
+        winReward = 9999999
         OppCost3Row = 1000
         MyCost3Row = 3000
         OppCost2Row = 500
