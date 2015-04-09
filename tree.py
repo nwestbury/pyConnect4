@@ -11,8 +11,8 @@ class graph:
         """
         This function simply returns the column from the minimax graphs's top
         values. In the case there is more than one column equally-well rated,
-        we will randomly return one of them (we didn't bother seeding the rand
-        since we'd prefer results are reproducible).
+        we will the one closest to the center.
+
         """
 
         bestvalue = self.root.value
@@ -25,8 +25,10 @@ class graph:
 
         if bestColumns:
             if len(bestColumns) > 1:
-                # return the column closest to the center, if they are all equ
+                # return the column closest to the center, if they are all
+                # equal
                 return min(bestColumns, key=lambda x: 3-x)
+
             else:
                 return bestColumns[0]
 
@@ -107,6 +109,7 @@ class node:
         """
         Get the value of a node based on its children, minimizing if value if
         it's the opponent turn or maxmizing if it's before my turn.
+
         """
         if self.children and self.value is None:
             if self.depth % 2:

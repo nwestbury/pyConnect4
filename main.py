@@ -14,6 +14,7 @@ BACKGROUND_COLOUR = (100, 100, 100)  # A shade of gray
 def quit():
     """
     This function is called on a clean quit.
+
     """
     pygame.quit()
     sys.exit()
@@ -33,7 +34,8 @@ def playAgain():
 
 def main():
     """
-    The main function from which everything else is ran
+    The main function from which everything else is run
+
     """
     global FPS, WINDOW_DIMENSIONS, BACKGROUND_COLOUR
 

@@ -31,7 +31,6 @@ class AI (BasePlayer):
         http://www.gamedev.net/topic/596955-trying-bit-boards-for-connect-4/
 
         """
-
         inverseBoard = ~(myBoard | oppBoard)
         rShift7MyBoard = myBoard >> 7
         lShift7MyBoard = myBoard << 7
@@ -47,7 +46,6 @@ class AI (BasePlayer):
         lShift12MyBoard = myBoard << 12
 
         # check _XXX and XXX_ horizontal
-
         result = inverseBoard & rShift7MyBoard & rShift14MyBoard\
             & (myBoard >> 21)
 
@@ -147,8 +145,8 @@ class AI (BasePlayer):
         Running time: O(1)
 
         Diagonals are skipped since they are worthless.
-        """
 
+        """
         inverseBoard = ~(myBoard | oppBoard)
         # check for _X
         result = inverseBoard & (myBoard >> 7)
@@ -168,8 +166,8 @@ class AI (BasePlayer):
         Running time: O(1)
 
         http://stackoverflow.com/questions/9829578/fast-way-of-counting-bits-in-python
-        """
 
+        """
         i = i & 0xFDFBF7EFDFBF  # magic number to mask to only legal bitboard
         # positions (bits 0-5, 7-12, 14-19, 21-26, 28-33, 35-40, 42-47)
         i = (i & 0x5555555555555555) + ((i & 0xAAAAAAAAAAAAAAAA) >> 1)
@@ -189,8 +187,8 @@ class AI (BasePlayer):
         blocking is a blocking move
 
         Running time: O(7n)
-        """
 
+        """
         winReward = 9999999
         OppCost3Row = 1000
         MyCost3Row = 3000
@@ -225,56 +223,10 @@ class AI (BasePlayer):
         return winning3 + blocking3 + winning2 + blocking2\
             + winning1 + blocking1
 
-    def checkForNInRow(self, bitboard, n):
-        """
-        This function returns the amount of n in a row found in the board.
-        It has been deprecated by the much faster binary functions above which
-        are optimized for n = 1, 2, and 3.
-
-        bitboard is a bitboard representation of the board for the given player
-        The bitboard representation is like this:
-        .  .  .  .  .  .  .  TOP
-        5 12 19 26 33 40 47
-        4 11 18 25 32 39 46
-        3 10 17 24 31 38 45
-        2  9 16 23 30 37 44
-        1  8 15 22 29 36 43
-        0  7 14 21 28 35 42  BOTTOM
-        """
-        counter = 0
-        for col_num in range(7):
-            low_col = col_num*7
-            top_col = low_col + 6
-            for bb_index in range(low_col, top_col):
-                bHorizontalSpace = n+col_num <= 7
-                bVerticalSpace = bb_index+n <= top_col
-                bVerticalDownSpace = bb_index-n+1 >= low_col
-
-                # check right horiontal
-                if bHorizontalSpace and\
-                        all((self.getNthBit(bitboard, k)
-                             for k in range(bb_index, (bb_index+7*n), 7))):
-                    counter += 1
-                # check top vertical
-                if bVerticalSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+n)))):
-                    counter += 1
-                # check / vertical
-                if bHorizontalSpace and bVerticalSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+8*n), 8))):
-                    counter += 1
-                # check \ vertical
-                if bHorizontalSpace and bVerticalDownSpace and\
-                    all((self.getNthBit(bitboard, k)
-                        for k in range(bb_index, (bb_index+6*n), 6))):
-                    counter += 1
-        return counter
-
     def search(self, board):
         """
         Construct the minimax tree, and get the best move based off the root.
+
         """
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
@@ -288,6 +240,7 @@ class AI (BasePlayer):
         If placing a token can win immediately, return that column.
         Otherwise, if you can block your opponent immediately, return
         one of those column(s).
+
         """
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
@@ -310,6 +263,7 @@ class AI (BasePlayer):
     def play(self, board):
         """
         Returns the column to place the piece in.
+
         """
         forcedColumn = self.forced_moves(board)  # if there is a forced move
         if forcedColumn > -1:

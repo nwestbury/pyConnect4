@@ -16,6 +16,7 @@ class BasePlayer:
         2  9 16 23 30 37 44
         1  8 15 22 29 36 43
         0  7 14 21 28 35 42  BOTTOM
+
         """
         self.name = name
         self.isAI = isAI
@@ -26,6 +27,7 @@ class BasePlayer:
     def flipBit(self, board, p, x, y):
         """
         Flip the bit at the x/y location.
+
         """
         board.BITBOARDS[p] |= (1 << (x*7 + y))
 
@@ -38,6 +40,7 @@ class BasePlayer:
     def printBoard(self, board):
         """
         Print the bit board for a single player
+
         """
         print(">" * 14)
         for i in range(5, -1, -1):  # iterate backwards from 5 to 0.
@@ -64,6 +67,7 @@ class BasePlayer:
         2  9 16 23 30 37 44
         1  8 15 22 29 36 43
         0  7 14 21 28 35 42  BOTTOM
+
         """
         listOfCoords = []
         for i in range(7):  # for every column

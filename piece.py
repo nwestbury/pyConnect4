@@ -24,6 +24,7 @@ class Piece:
         Unfortuately, antialiased filled circles don't exsist so we draw
         the antialiased outline before drawing the filled inside, as recommneded
         by the offical docs (otherwise the circles look horrendously ugly).
+
         """
         cur_color = self.COLORS[self.STATUS]
         gfxdraw.aacircle(screen, self.X, self.Y, self.radius, cur_color)
@@ -34,6 +35,7 @@ class Piece:
         Argument:
         player : an integer that is either 1 or 2 that speifies the current
         player, this will change the color when it is printed to the screen.
+
         """
         self.STATUS = player
 

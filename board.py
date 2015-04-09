@@ -154,6 +154,7 @@ class Board:
         is requested to be placed.
 
         Return: 1 if the placed token wins the game 2 if draw, 0 otherwise
+
         """
         if col < 0:  # invalid column
             return False
@@ -189,6 +190,7 @@ class Board:
         If the board has all of its valid slots filled, then it is a draw.
         We mask the board to a bitboard with all positions filled
         (0xFDFBF7EFDFBF) and if all the bits are active, it is a draw.
+
         """
         return (overall_bitboard & 0xFDFBF7EFDFBF) == 0xFDFBF7EFDFBF
 
@@ -196,7 +198,9 @@ class Board:
         """
         This function is called at the end of every turn. It returns 1 on win
         2 on draw
+
         False otherwise
+
         """
         if self.hasWon(self.BITBOARDS[self.TURN]):
             return 1
