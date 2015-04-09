@@ -165,7 +165,7 @@ class AI (BasePlayer):
 
         Running time: O(1)
 
-        http://stackoverflow.com/questions/9829578/fast-way-of-counting-bits-in-python
+        Help from: http://stackoverflow.com/q/9829578/1524592
 
         """
         i = i & 0xFDFBF7EFDFBF  # magic number to mask to only legal bitboard
@@ -223,15 +223,28 @@ class AI (BasePlayer):
         return winning3 + blocking3 + winning2 + blocking2\
             + winning1 + blocking1
 
-    def search(self, board):
+    def search(self, board, use_alphabeta=True):
         """
         Construct the minimax tree, and get the best move based off the root.
 
+        You have two options to build the tree:
+            if use_alphabeta is True:
+                alpha beta will be used to construct the tree
+            otherwise:
+                raw minimax will be used to construct the tree (it may be
+            required to lower the maxDepth because it will be slower).
         """
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
-        g = tree.graph(myBoard, oppBoard)  # minimax graph
-        g.construct_tree(board, self, g.root, myBoard, oppBoard, 1, 5)
+        maxDepth = 7
+
+        g = tree.graph(myBoard, oppBoard, maxDepth)  # minimax graph
+
+        if use_alphabeta:
+            g.alphabeta(board, self, g.root, maxDepth,
+                        float('-inf'), float('inf'))
+        else:
+            g.construct_tree(board, self, g.root, myBoard, oppBoard, 1)
 
         return g.getMove()
 
@@ -240,8 +253,8 @@ class AI (BasePlayer):
         If placing a token can win immediately, return that column.
         Otherwise, if you can block your opponent immediately, return
         one of those column(s).
-
         """
+
         myBoard = board.BITBOARDS[board.TURN]
         oppBoard = board.BITBOARDS[(not board.TURN)]
         possibleBits = self.get_legal_locations(myBoard | oppBoard)
@@ -263,8 +276,8 @@ class AI (BasePlayer):
     def play(self, board):
         """
         Returns the column to place the piece in.
-
         """
+
         forcedColumn = self.forced_moves(board)  # if there is a forced move
         if forcedColumn > -1:
             return forcedColumn  # play it

@@ -17,6 +17,8 @@ The files included should be as follows:
     piece.py (the graphic piece class)
     tree.py (the minimax tree)
     README.md (this file, using MarkDown)
+    
+All files are in full conformity with PEP8.
 
 ## Running Connect 4
 To run the game, cd to directory of the game and enter `python3 main.py` in
@@ -60,7 +62,9 @@ The graph class stores the possible combinations of boards in a tree-like
 structure, where each node is a representation of a possibility of a baord.
 To decide a move, the AI moves up each node by depth using a mini-max
 algorithm (alternating between max cost of the board and min cost of the
-board each depth).
+board each depth). The call on the AI's search function allows to either
+use normal minimax or minimax with alpha-beta prunning (True by default),
+an optimization that allows us to go deeper in the tree.
 
 ## Credits
 
@@ -68,9 +72,12 @@ John Tromp's bitboard - http://tromp.github.io/c4/Connect4.java
 
 Evaluating position in bitboard - http://www.gamedev.net/topic/596955-trying-bit-boards-for-connect-4/
 
+Alpha-beta prunning - http://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+
 ## To be implemented
 
 - Main menu where you can decide who plays
 - Different difficulties of AI (changing depth and modifying evaluation
    function)
 - Improved graphics, sound
+- More optimizing

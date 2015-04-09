@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 class BasePlayer:
     def __init__(self, name, isAI):
         """
@@ -27,14 +30,19 @@ class BasePlayer:
     def flipBit(self, board, p, x, y):
         """
         Flip the bit at the x/y location.
-
         """
         board.BITBOARDS[p] |= (1 << (x*7 + y))
 
     def getNthBit(self, num, n):
+        """
+        Get the nth bit in the bitboard (0 or 1).
+        """
         return (num >> n) & 1
 
     def setNthBit(self, num, n):
+        """
+        Set the nth bit in the bitboard to 1.
+        """
         return num | (1 << n)
 
     def printBoard(self, board):
@@ -71,13 +79,17 @@ class BasePlayer:
         """
         listOfCoords = []
         for i in range(7):  # for every column
-            for x in range(i*7, i*7+6):  # for every cell in the column
+            for x in range(i*7, i*7+6):  # for each cell in col, from bot to top
                 if not self.getNthBit(overall_bitboard, x):  # get the 1st empty
                     listOfCoords.append((i, x))
                     break
         return listOfCoords
 
     def get_legal_board(self, overall_bitboard):
+        """
+        Takes as an argument a combined bitboard for the opponent and player
+        and returns a bitboard with all the valid locations set to one.
+        """
         board = 0
         for i in range(7):
             for x in range(i*7, i*7+6):

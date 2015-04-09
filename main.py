@@ -14,15 +14,14 @@ BACKGROUND_COLOUR = (100, 100, 100)  # A shade of gray
 def quit():
     """
     This function is called on a clean quit.
-
     """
     pygame.quit()
     sys.exit()
 
+
 def playAgain():
     """
     This function checks to see if a new game wants to be played at the end.
-
     """
     while True:
         for event in pygame.event.get():  # event handling loop
@@ -32,11 +31,12 @@ def playAgain():
             elif event.type == KEYUP and event.key == K_r:
                 main()
 
+
 def main():
     """
     The main function from which everything else is run
-
     """
+
     global FPS, WINDOW_DIMENSIONS, BACKGROUND_COLOUR
 
     pygame.init()
@@ -51,6 +51,8 @@ def main():
 
     screen.blit(background, (0, 0))
 
+    # Change the following two lines to add a Human() or an AI()
+    # The parameter is a string for the name of the player.
     player1 = AI("CPU 1")
     player2 = AI("CPU 2")
     gameBoard = board.Board(player1, player2)
@@ -60,7 +62,8 @@ def main():
 
     while not isDone:
         # draw header and footer
-        board.draw_header(gameBoard.PLAYERS, gameBoard.COUNT1, gameBoard.COUNT2, screen)
+        board.draw_header(gameBoard.PLAYERS, gameBoard.COUNT1,
+                          gameBoard.COUNT2, screen)
         board.draw_footer(gameBoard.TURN, gameBoard.PLAYERS, count, screen)
         gameBoard.draw(screen)  # draw the main game board
         pygame.display.flip()  # update the screen
@@ -90,7 +93,7 @@ def main():
     else:
         message_text = "Draw!"
 
-    message = message_font.render(message_text, True, (160,160,169))
+    message = message_font.render(message_text, True, (160, 160, 169))
     message_pos = message.get_rect()
     message_pos.centerx = screen.get_rect().centerx
     message_pos.centery = screen.get_rect().centery

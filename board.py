@@ -219,4 +219,9 @@ class Board:
         return False
 
     def isAITurn(self):
+        """
+        Return True if the AI's turn, this is needed to ignore user clicks made
+        during the AI "thinking" phase.
+        """
+
         return self.PLAYERS[self.TURN].isAI
